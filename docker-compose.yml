@@ -3,7 +3,7 @@ version: '3'
 services:
   db:
     image: mysql
-    container_name: db_galmatechblog
+    container_name: db_gblog
     restart: always
     volumes:
       - db-data:/var/lib/mysql
@@ -14,7 +14,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin
-    container_name: phpmyadmin_galmatechblog
+    container_name: phpmyadmin_gblog
     depends_on:
       - db
     ports:
@@ -26,7 +26,7 @@ services:
 
   www:
     build: docker
-    container_name: www_galmatechblog
+    container_name: www_gblog
     ports:
       - "8000:80"
     volumes:
