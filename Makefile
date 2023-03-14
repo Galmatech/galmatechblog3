@@ -17,7 +17,7 @@ COLOUR_END=\033[0m
 init: ## Init the project
 	$(MAKE) start
 	$(MAKE) composer-install
-##$(MAKE) npm-install
+	$(MAKE) npm-install
 	@echo "$(COLOUR_GREEN)The application is available at: http://127.0.0.1:8000/.$(COLOUR_END)"
 
 cache-clear: ## Clear cache
@@ -31,6 +31,8 @@ tests: ## Run all tests
 	$(PHP) bin/phpunit --testdox tests/Unit/
 	$(PHP) bin/phpunit --testdox tests/Functional/
 	$(PHP) bin/phpunit --testdox tests/E2E/
+
+
 
 database-init-test: ## Init database for test
 	$(SYMFONY_CONSOLE) d:d:d --force --if-exists --env=test
@@ -50,6 +52,14 @@ functional-test: ## Run functional tests
 e2e-test: ## Run E2E tests
 	$(MAKE) database-init-test
 	$(PHP) bin/phpunit --testdox tests/E2E/
+
+fix: ## Run PHP CS Fixer
+	$(COMPOSER) fix
+	@echo "$(COLOUR_GREEN)Fixed OK ✅$(COLOUR_END)"
+
+check: ## Run PHP CS Fixer with diff
+	$(COMPOSER) check
+	@echo "$(COLOUR_GREEN)Fixed OK ✅$(COLOUR_END)"
 
 ## —— 🐳 Docker ——
 start: ## Start app
