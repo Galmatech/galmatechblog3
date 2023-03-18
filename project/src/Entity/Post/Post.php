@@ -44,8 +44,7 @@ class Post
     private string $state = Post::STATES[0];
 
     #[ORM\OneToOne(targetEntity: Thumbnail::class, inversedBy: 'post', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(name: 'thumbnail_id', referencedColumnName: 'id', nullable: false)]
-    private Thumbnail $thumbnail;
+    private ?Thumbnail $thumbnail = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
     #[Assert\NotNull()]
@@ -126,12 +125,12 @@ class Post
         return $this;
     }
 
-    public function getThumbnail(): Thumbnail
+    public function getThumbnail(): ?Thumbnail
     {
         return $this->thumbnail;
     }
 
-    public function setThumbnail(Thumbnail $thumbnail): self
+    public function setThumbnail(?Thumbnail $thumbnail): self
     {
         $this->thumbnail = $thumbnail;
 
