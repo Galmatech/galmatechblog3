@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Entity;
+declare(strict_types=1);
 
-use App\Repository\PostRepository;
+namespace App\Entity\Post;
+
+use App\Repository\Post\PostRepository;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -41,6 +43,10 @@ class Post
     #[ORM\Column(type: 'string', length: 255)]
     private string $state = Post::STATES[0];
 
+    #[ORM\OneToOne(targetEntity: Thumbnail::class, inversedBy: 'post', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: 'thumbnail_id', referencedColumnName: 'id', nullable: false)]
+    private Thumbnail $thumbnail;
+
     #[ORM\Column(type: 'datetime_immutable')]
     #[Assert\NotNull()]
     private \DateTimeImmutable $createdAt;
@@ -56,13 +62,13 @@ class Post
     }
 
     #[ORM\PrePersist]
-    public function prePersist()
+    public function prePersist(): void
     {
         $this->slug = (new Slugify())->slugify($this->title);
     }
 
     #[ORM\PreUpdate]
-    public function preUpdate()
+    public function preUpdate(): void
     {
         $this->updatedAt = new \DateTimeImmutable();
     }
@@ -116,6 +122,18 @@ class Post
     public function setState(string $state): self
     {
         $this->state = $state;
+
+        return $this;
+    }
+
+    public function getThumbnail(): Thumbnail
+    {
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail(Thumbnail $thumbnail): self
+    {
+        $this->thumbnail = $thumbnail;
 
         return $this;
     }
