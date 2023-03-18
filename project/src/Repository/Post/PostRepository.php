@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository\Post;
 
 use App\Entity\Post\Post;
@@ -21,46 +23,18 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
-    public function save(Post $entity, bool $flush = false): void
+    /**
+     * Get published post.
+     */
+    public function findPostsPublishedOk(): mixed
     {
-        $this->getEntityManager()->persist($entity);
+        $postsPublishedOk = $this->createQueryBuilder('p')
+        ->where('p.state LIKE :state')
+        ->setParameter('state', '%STATE_PUBLISHED%')
+        ->orderBy('p.createdAt', 'DESC')
+        ->getQuery()
+        ->getResult();
 
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+        return $postsPublishedOk;
     }
-
-    public function remove(Post $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
-//    /**
-//     * @return Post[] Returns an array of Post objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Post
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }
