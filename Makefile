@@ -59,7 +59,8 @@ fix: ## Run PHP CS Fixer
 
 check: ## Run PHP CS Fixer with diff
 	$(COMPOSER) check
-	@echo "$(COLOUR_GREEN)Fixed OK ✅$(COLOUR_END)"
+	@echo "$(COLOUR_GREEN)Stan  ✅$(COLOUR_END)"
+	@echo "$(COLOUR_GREEN)Fixer ✅$(COLOUR_END)"
 
 ## —— 🐳 Docker ——
 start: ## Start app
